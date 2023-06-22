@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import bgimag from './s85.jpeg';
 function App() {
