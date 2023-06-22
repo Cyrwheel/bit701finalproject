@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.13-SNAPSHOT'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "com.github.node-gradle.node" version '4.0.0'
+
 }
 
 group = 'com.example'
@@ -37,3 +39,56 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+// React build 설정
+def reactAppDir = "$projectDir/src/main/reactjs"
+/*
+sourceSets {
+  main {
+    resources {
+      srcDirs = ["$webappDir/build", "$projectDir/src/main/resources"]
+    }
+  }
+}
+*/
+
+processResources {
+    dependsOn "copyReactFile"
+    //카피리액트파일 호출
+    //dependsOn "appNpmInstall"
+}
+
+
+task copyReactFile(type: Copy) {
+    dependsOn "buildReact" //리액트를 빌드에서 아래의 주소에 넣는것 -> 스프링으로 실행했을 때 리액트도 실행하게해주는것.
+    from "$reactAppDir/build"
+    //into "$buildDir/resources/main/static"
+    into "$projectDir/src/main/resources/static/"
+}
+
+task buildReact(type: Exec) {
+    dependsOn "installReact"
+    workingDir "$reactAppDir"
+    inputs.dir "$reactAppDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "run-script", "build"
+    } else {
+        commandLine "npm", "run-script", "build"
+    }
+}
+
+task installReact(type: Exec) {
+    workingDir "$reactAppDir"
+    inputs.dir "$reactAppDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "audit", "fix"
+        commandLine "npm.cmd", "install"
+    } else {
+        //라이브러리를 다운받아서 빌드된것을 /src/main/resources/static/" 여기에 넣어라
+        commandLine "npm", "audit", "fix"
+        commandLine "npm", "install"
+    }
+}
+
