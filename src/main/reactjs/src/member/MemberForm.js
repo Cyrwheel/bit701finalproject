@@ -18,7 +18,8 @@ function MemberForm(props) {
         //데이터가 json방식으로 넘어온다.
         selectAddress: (data) => {
             console.log(`
-                주소: ${data.address},
+                주소: ${data.address}
+                아파트명 : ${data.buildingName}
                 우편번호: ${data.zonecode}
             `)
             setOpenPostcode(false);
