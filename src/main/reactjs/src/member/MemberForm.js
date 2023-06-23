@@ -1,45 +1,59 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../App.css';
-import DaumPostcodeEmbed from "react-daum-postcode";
 function MemberForm(props) {
 
     const [openPostcode, setOpenPostcode] = React.useState(false);
 
-    /**
-     * handler
-     */
-    const handle = {
-        // 버튼 클릭 이벤트
-        clickButton: () => {
-            setOpenPostcode(current => !current);
-        },
+    const [myid,setMyid]=useState('');
+    const [mypass,setMypass]=useState('');
+    const [myaddress,setMyaddress]=useState('');
+    const [myname,setMyname]=useState('');
+    const [idcount,setIdcount]=useState(0);
 
-        // 주소 선택 이벤트
-        //데이터가 json방식으로 넘어온다.
-        selectAddress: (data) => {
-            console.log(`
-                주소: ${data.address}
-                아파트명 : ${data.buildingName}
-                우편번호: ${data.zonecode}
-            `)
-            setOpenPostcode(false);
-        },
+    const onSubmitEvent=(e)=>{
+        e.preventDefault(); //기본 이벤트 무효화
     }
 
     return (
         <div>
-                <h5>회원가입</h5>
+              <form onSubmit={onSubmitEvent}>
+                    <table className={"table"} style={{width:"500px"}}>
+                        <caption align={"top"}><b>회원가입</b></caption>
+                        <tbody>
+                        <tr>
+                            <th style={{width:'100px',backgroundColor:'#b0e0e6'}}>이름</th>
+                            <td>
+                                <input type={"text"} className={"form-control"}
+                                placeholder={"이름입력"} required
+                                value={myname} onChange={(e)=>setMyname(e.target.value)}/>
+                            </td>
+                        </tr>
 
-            <button onClick={handle.clickButton}>toggle</button>
+                        <tr>
+                            <th style={{width:'100px',backgroundColor:'#b0e0e6'}}>아이디</th>
+                            <td className={"input-group"}>
+                                <input type={"text"} className={"form-control"}
+                                       placeholder={"아이디"} required
+                                       value={myid} onChange={(e)=>setMyid(e.target.value)}/>
 
-            {openPostcode &&
-                <DaumPostcodeEmbed
-                    onComplete={handle.selectAddress}  // 값을 선택할 경우 실행되는 이벤트
-                    autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-                    defaultQuery='판교역로 235' // 팝업을 열때 기본적으로 입력되는 검색어
-                />}
+                                <button type={"button"} className={"btn btn-outline-warning btn-sm"}>중복확인 </button>
+                            </td>
+                        </tr>
 
 
+
+                        <tr>
+                            <td colSpan={2} align={'center'}>
+                                <button type={"submit"} className={"btn btn-outline-primary"} style={{width:'100px'}}>
+                                    가입하기
+                                </button>
+                            </td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+              </form>
 
         </div>
     );
