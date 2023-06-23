@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import '../App.css';
 function MemberForm(props) {
 
-    const [openPostcode, setOpenPostcode] = React.useState(false);
+    const [openPostcode, setOpenPostcode] = useState(false);
 
     const [myid,setMyid]=useState('');
     const [mypass,setMypass]=useState('');
