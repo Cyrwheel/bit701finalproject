@@ -24,6 +24,7 @@ function LoginForm(props) {
                     sessionStorage.myname=res.data.myname;
                     sessionStorage.myid=myid;
                     navi("/")
+                    window.location.reload();
                 }else {
                     alert("아이디나 비밀번호가 맞지 않습니다.");
                     sessionStorage.loginok="no";
